@@ -2,7 +2,7 @@
 
 import argparse
 from utils.config.config import Config
-from utils.provider import Provider
+from utils.dataset.provider import Provider
 
 def parse_args(args):
     parser = argparse.ArgumentParser()
@@ -16,9 +16,13 @@ def main(args=None):
     known_args, unknown_args = parse_args(args)
     cfg = Config.fromfile(known_args.config)
 
-    dataset = Provider.get_dataset(cfg.data.input_data)
-    # data = dataset.parse()
-    # dataset.convert(data)
+    # parse annotations to standartized format
+    parser = Provider.get_dataset(cfg.data.input_data)
+    containers = parser.parse()
+
+    # convert from standartized format to selected type
+    converter = Provider.get_dataset(cfg.data.output_data)
+    converter.convert(containers=containers, containers_struct=parser.struct)
 
 
 if __name__ == '__main__':
