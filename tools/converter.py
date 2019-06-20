@@ -16,7 +16,7 @@ def main(args=None):
     known_args, unknown_args = parse_args(args)
     cfg = Config.fromfile(known_args.config)
 
-    dataset = Provider.get_dataset(cfg.data)
+    dataset = Provider.get_dataset(cfg.data.input_data)
     # data = dataset.parse()
     # dataset.convert(data)
 
