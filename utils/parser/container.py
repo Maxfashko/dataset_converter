@@ -1,3 +1,8 @@
+import os.path as osp
+
+def get_name(path):
+    pass
+
 
 class BBox(object):
     """docstring for BBox"""
@@ -9,40 +14,40 @@ class BBox(object):
         self.y2 = kwargs['y2']
 
 
-class Container(object):
-    """docstring for Container"""
+class Annotation:
     def __init__(self, **kwargs):
-        super(Container, self).__init__()
-        self.bbox = kwargs['bbox']
-        self.label = kwargs['label']
+        self.bbox = kwargs.get('bbox')
+        self.label = kwargs.get('label')
+        self.segmentations = kwargs.get('segmentations')
 
 
-class Containers(object):
-    """docstring for Containers"""
+class AnnotationObject:
     def __init__(self, **kwargs):
-        super(Containers, self).__init__()
-        self._containers = {}
+        self.annotations = kwargs.get('annotations'),
+        self.image_filename = kwargs.get('image_filename'),
+        self.annotation_filename = kwargs.get('annotation_filename')
 
-    def add(self, name, val):
-        if type(self._containers.get(name)) == list:
-            self._containers[name].append(val)
-        else:
-            self._containers[name] = []
-            self._containers[name].append(val)
 
-    def get_classes(self):
-        s = set()
-        for fn, containers in self._containers.items():
-            for container in containers:
-                s.add(str(container.label))
-        return {val:idx+1 for idx, val in enumerate(s)}
+class AnnotationsContainer:
+    def __init__(self):
+        self._annotations_container = []
 
-    def containers():
-        doc = "The containers property."
-        def fget(self):
-            for key, val in self._containers.items():
-                yield key, val
-        def fdel(self):
-            del self._containers
-        return locals()
-    containers = property(**containers())
+    def get_data(self):
+        for idx, annotation_object in enumerate(self._annotations_container):
+            yield idx, \
+                annotation_object.annotations[0], \
+                annotation_object.image_filename[0], \
+                annotation_object.annotation_filename
+
+
+    def get_len(self):
+        return len(self._annotations_container)
+
+    def add_data(self, annotations, image_filename, annotation_filename):
+        self._annotations_container.append(
+            AnnotationObject(
+                annotations=annotations,
+                image_filename=image_filename,
+                annotation_filename=annotation_filename
+            )
+        )

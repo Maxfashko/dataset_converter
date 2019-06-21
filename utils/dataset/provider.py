@@ -17,6 +17,9 @@ class Provider:
         data_info = copy.deepcopy(data_cfg)
 
         dataset_type = data_info.pop('type')
-        if is_str(dataset_type):
-            dataset_type = getattr(parent, dataset_type)
-        return dataset_type(**data_info)
+        try:
+            if is_str(dataset_type):
+                dataset_type = getattr(parent, dataset_type)
+            return dataset_type(**data_info)
+        except Exception as e:
+            print(e)

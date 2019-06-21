@@ -8,9 +8,11 @@ data = dict(
     ),
 
     output_data = dict(
-        type="PascalDataset",
-        data_root='/tmp',
-        dir_name='2'
-
+        type="LabelmeDataset",
+        data_root='/tmp/Labelme_annotations',
+        dir_name='2',
+        labels_params=dict(
+            allowed_labels=['person']
+        )
     )
 )

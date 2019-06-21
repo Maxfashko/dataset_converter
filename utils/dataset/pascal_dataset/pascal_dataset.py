@@ -1,3 +1,4 @@
+import sys
 import shutil
 from glob import glob
 import os.path as osp
@@ -10,24 +11,30 @@ from sklearn.model_selection import train_test_split
 
 from utils.dataset.custom_dataset import CustomDataset
 from utils.dataset.pascal_dataset.xmlparser import XmlParser
-from utils.parser.container import Container, Containers, BBox
+from utils.parser.container import Annotation, AnnotationsContainer, BBox
 from utils.dataset.pascal_dataset.pascal_struct_dataset import PascalStructDataset
 
 
 class PascalDataset(CustomDataset):
-    def __init__(self, data_path):
+    def __init__(self, data_root, dir_name):
         super(CustomDataset, self).__init__()
-        self.struct = PascalStructDataset(path=data_path)
-        self.counter = 0
+        self.data_root = data_root
+        self.dir_name = dir_name
+        self.data_path = osp.join(self.data_root, self.dir_name)
+        self.struct = PascalStructDataset(path=self.data_path)
 
+    @CustomDataset.init_parse
     def parse(self):
-        print('parse')
+        if not self.struct.check_path():
+            print(f'path not exists! {self.data_path}')
+            sys.exit()
 
-        containers = Containers()
+        annotations_container = AnnotationsContainer()
         filenames = list(glob(f'{self.struct.annot_dir}/*{self.struct.annot_ext}'))[:100]
 
         with tqdm(total=len(filenames)) as pbar:
             for fn in filenames:
+                annotations = []
                 basename, _ = osp.splitext(osp.basename(fn))
 
                 tree = ElementTree.parse(fn)
@@ -36,18 +43,24 @@ class PascalDataset(CustomDataset):
                 for obj in root.findall('object'):
                     bbox = obj.find('bndbox')
 
-                    container = Container(
-                        bbox=BBox(
-                            x1=int(bbox.find("xmin").text),
-                            y1=int(bbox.find("ymin").text),
-                            x2=int(bbox.find("xmax").text),
-                            y2=int(bbox.find("ymax").text)),
-                        label=obj.find("name").text
+                    annotations.append(
+                        Annotation(
+                            bbox=BBox(
+                                x1=int(bbox.find("xmin").text),
+                                y1=int(bbox.find("ymin").text),
+                                x2=int(bbox.find("xmax").text),
+                                y2=int(bbox.find("ymax").text)),
+                            label=obj.find("name").text
+                        )
                     )
 
-                    containers.add(name=basename, val=container)
+                annotations_container.add_data(
+                    annotations=annotations,
+                    image_filename=self.struct.get_image_file(basename),
+                    annotation_filename=self.struct.get_annotation_file(basename)
+                )
                 pbar.update(1)
-        return containers
+        return annotations_container
 
     def create_imagesets(self, idx, test_size=0.2, seed=42):
         ''' create ImageSets train/val '''
@@ -61,24 +74,22 @@ class PascalDataset(CustomDataset):
         except Exception as e:
             raise
 
-    def convert(self, containers, containers_struct):
-        print('convert')
-
+    @CustomDataset.init_convert
+    def convert(self, annotations_container):
         # create structure over drive
         if not self.struct.check_path():
             self.struct.make_struct()
 
-        with tqdm(total=len(list(containers.containers))) as pbar:
-            for idx, (filename, containers) in enumerate(containers.containers):
-                filename_img = containers_struct.get_image_file(filename)
-                (w, h), d = imagesize.get(filename_img), 3
+        with tqdm(total=annotations_container.get_len()) as pbar:
+            for idx, annts, img_fn, annt_fn in annotations_container.get_data():
+                (w, h), d = imagesize.get(img_fn), 3
 
                 xml_annot = XmlParser()
-                xml_annot.set_filename_root(f'{idx}{containers_struct.image_ext}')
+                xml_annot.set_filename_root(f'{idx}{self.struct.image_ext}')
                 xml_annot.set_size_root([h, w, d])
 
-                for container in containers:
-                    xml_annot.add_sub_object(name=container.label, bbox=container.bbox)
+                for annt in annts:
+                    xml_annot.add_sub_object(name=annt.label, bbox=annt.bbox)
 
                 # change image name in xml file
                 xml_annot.root.find('filename').text = str(idx)+'.jpg'
@@ -87,8 +98,9 @@ class PascalDataset(CustomDataset):
                 xml_annot.write_root(self.struct.get_annotation_file(idx))
 
                 # write image
-                shutil.copy(filename_img, self.struct.get_image_file(idx))
+                shutil.copy(img_fn, self.struct.get_image_file(idx))
+
                 pbar.update(1)
 
-        # make txt list with train/test filanames
+        # make txt list with train/test filenames
         self.create_imagesets(idx)

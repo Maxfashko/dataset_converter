@@ -18,11 +18,11 @@ def main(args=None):
 
     # parse annotations to standartized format
     parser = Provider.get_dataset(cfg.data.input_data)
-    containers = parser.parse()
+    annotations_container = parser.parse()
 
-    # convert from standartized format to selected type
+    # convert from standartized format to selected type dataset
     converter = Provider.get_dataset(cfg.data.output_data)
-    converter.convert(containers=containers, containers_struct=parser.struct)
+    converter.convert(annotations_container)
 
 
 if __name__ == '__main__':

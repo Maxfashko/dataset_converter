@@ -3,7 +3,7 @@ from xml.dom import minidom
 from xml.etree.ElementTree import Element, SubElement, Comment
 
 """
-Creating an xml Pascal VOC2007 Markup File
+Creating an xml labelme Markup File
 """
 
 
@@ -21,13 +21,6 @@ class XmlParser:
         with open(path, "wb") as file:
             file.write(data)
 
-    def prettify(elem):
-        """Return a pretty-printed XML string for the Element.
-        """
-        rough_string = ElementTree.tostring(elem, 'utf-8')
-        reparsed = minidom.parseString(rough_string)
-        return reparsed.self.rootrettyxml(indent="  ")
-
     def create_root(self):
         self.root = Element('annotation')
 
@@ -43,12 +36,12 @@ class XmlParser:
         owner = SubElement(self.root, "owner")
         owner.text = " "
 
-        size = SubElement(self.root, "size")
-        width = SubElement(size, "width")
-        width.text = " "
-        height = SubElement(size, "height")
-        height.text = " "
-        depth = SubElement(size, "depth")
+        imagesize = SubElement(self.root, "imagesize")
+        nrows = SubElement(imagesize, "nrows")
+        nrows.text = " "
+        ncols = SubElement(imagesize, "ncols")
+        ncols.text = " "
+        depth = SubElement(imagesize, "depth")
         depth.text = " "
 
         segmented = SubElement(self.root, "segmented")
@@ -60,11 +53,11 @@ class XmlParser:
                 s.text = name
                 break
 
-    def set_size_root(self, size):
-        d = {"width":size[1], "height":size[0], "depth":size[2]}
+    def set_size_root(self, width, height, depth):
+        d = {"ncols":width, "nrows":height, "depth":depth}
 
         for elem in self.root:
-            if elem.tag == "size":
+            if elem.tag == "imagesize":
                 child = elem.getchildren()
                 for val in child:
                     try:
@@ -74,7 +67,7 @@ class XmlParser:
                         print(e)
                 break
 
-    def add_sub_object(self, name, bbox, truncated="0", difficult="0", input_root=None):
+    def add_sub_object(self, name, bbox, _type='bounding_box', deleted="0", verified="0", input_root=None):
         if not input_root:
             obj = SubElement(self.root, "object")
         else:
@@ -82,20 +75,24 @@ class XmlParser:
 
         name_ = SubElement(obj, "name")
         name_.text = name
-        truncated_ = SubElement(obj, "truncated")
-        truncated_.text = truncated
-        difficult_ = SubElement(obj, "difficult")
-        difficult_.text = difficult
+        deleted_ = SubElement(obj, "deleted")
+        deleted_.text = deleted
+        verified_ = SubElement(obj, "verified")
+        verified_.text = verified
 
-        bndbox = SubElement(obj, "bndbox")
-        xmin = SubElement(bndbox, "xmin")
-        xmin.text = str(bbox.x1)
+        type_ = SubElement(obj, "type")
+        type_.text = _type
 
-        ymin = SubElement(bndbox, "ymin")
-        ymin.text = str(bbox.y1)
+        polygon = SubElement(obj, "polygon")
+        username = SubElement(polygon, "username")
+        username.text = 'admin'
 
-        xmax = SubElement(bndbox, "xmax")
-        xmax.text = str(bbox.x2)
+        def make_point(elem, crd):
+            pt = SubElement(elem, "pt")
+            x = SubElement(pt, "x")
+            y = SubElement(pt, "y")
+            x.text = str(crd[0])
+            y.text = str(crd[1])
 
-        ymax = SubElement(bndbox, "ymax")
-        ymax.text = str(bbox.y2)
+        x1, y1, x2, y2 = bbox.x1, bbox.y1, bbox.x2, bbox.y2
+        [make_point(polygon, crd) for crd in [(x1, y1), (x2, y1), (x2, y2), (x1, y2)]]
