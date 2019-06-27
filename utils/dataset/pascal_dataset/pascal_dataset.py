@@ -30,7 +30,7 @@ class PascalDataset(CustomDataset):
             sys.exit()
 
         annotations_container = AnnotationsContainer()
-        filenames = list(glob(f'{self.struct.annot_dir}/*{self.struct.annot_ext}'))[:100]
+        filenames = list(glob(f'{self.struct.annot_dir}/*{self.struct.annot_ext}'))
 
         with tqdm(total=len(filenames)) as pbar:
             for fn in filenames:

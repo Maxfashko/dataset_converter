@@ -64,7 +64,7 @@ class LabelmeStructDataset:
         os.makedirs(self.annot_dir_project)
         os.makedirs(self.scribbles_dir_project)
 
-    def make_struct_path(self, rewrite=True):
+    def make_struct_path(self, rewrite=False):
         if self.check_struct_path():
             if not rewrite:
                 print('directory already exists!')

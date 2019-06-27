@@ -1,3 +1,4 @@
+import sys
 import shutil
 from glob import glob
 import os.path as osp
@@ -47,7 +48,7 @@ cfg params:
 
 class LabelmeDataset(CustomDataset):
     """docstring for LabelmeDataset"""
-    def __init__(self, data_root, dir_name, labels_params):
+    def __init__(self, data_root, dir_name):
         super(CustomDataset, self).__init__()
         self.data_root = data_root
         self.dir_name = dir_name
@@ -56,8 +57,57 @@ class LabelmeDataset(CustomDataset):
             data_root=self.data_root, dir_name=self.dir_name
         )
 
+    @CustomDataset.init_parse
     def parse(self):
-        pass
+        if not self.struct.check_project_path():
+            print(f'path not exists! {self.data_path}')
+            sys.exit()
+
+        def parse_points(polygon):
+            d = {'x':set(), 'y':set()}
+
+            for pt in polygon.findall("pt"):
+                d['x'].add(int(pt.find('x').text))
+                d['y'].add(int(pt.find('y').text))
+
+            x1 = min(d['x'])
+            y1 = min(d['y'])
+            x2 = max(d['x'])
+            y2 = max(d['y'])
+
+            return x1, y1, x2, y2
+
+
+        annotations_container = AnnotationsContainer()
+        filenames = list(glob(f'{self.struct.annot_dir_project}/*{self.struct.annot_ext}'))
+
+        with tqdm(total=len(filenames)) as pbar:
+            for fn in filenames:
+                annotations = []
+                basename, _ = osp.splitext(osp.basename(fn))
+
+                tree = ElementTree.parse(fn)
+                root = tree.getroot()
+
+                for obj in root.findall('object'):
+                    if obj.find('type').text == 'bounding_box':
+                        polygon = obj.find('polygon')
+                        x1, y1, x2, y2 = parse_points(polygon)
+
+                        annotations.append(
+                            Annotation(
+                                bbox=BBox(x1=x1, y1=y1, x2=x2, y2=y2),
+                                label=obj.find("name").text
+                            )
+                        )
+
+                annotations_container.add_data(
+                    annotations=annotations,
+                    image_filename=self.struct.get_image_file(basename),
+                    annotation_filename=self.struct.get_annotation_file(basename)
+                )
+                pbar.update(1)
+        return annotations_container
 
     @CustomDataset.init_convert
     def convert(self, annotations_container):
