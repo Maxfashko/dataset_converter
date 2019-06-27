@@ -67,8 +67,8 @@ class LabelmeDataset(CustomDataset):
             d = {'x':set(), 'y':set()}
 
             for pt in polygon.findall("pt"):
-                d['x'].add(int(pt.find('x').text))
-                d['y'].add(int(pt.find('y').text))
+                d['x'].add(int(float(pt.find('x').text)))
+                d['y'].add(int(float(pt.find('y').text)))
 
             x1 = min(d['x'])
             y1 = min(d['y'])
