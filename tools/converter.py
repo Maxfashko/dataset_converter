@@ -23,9 +23,9 @@ def main(args=None):
     annotations_container = parser.parse()
 
     # filter annotation if necessary
-    if cfg.filter_params.filtration:
+    if cfg.data.filter_params.filtration:
         flt = Filter(
-            cfg=cfg.filter_params,
+            cfg=cfg.data.filter_params,
             annotations_container=annotations_container
         )
 

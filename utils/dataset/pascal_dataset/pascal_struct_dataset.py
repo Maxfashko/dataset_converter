@@ -67,21 +67,21 @@ class PascalStructDataset:
         return os.path.join(self.image_sets, self.test_list_name)
 
     def get_test_file(self):
-        return os.path.join(self.path, self.image_sets, 'test.txt')
+        return os.path.join(self.image_sets, 'test.txt')
 
     def get_train_file(self):
-        return os.path.join(self.path, self.image_sets, 'trainval.txt')
+        return os.path.join(self.image_sets, 'trainval.txt')
 
     def get_annotation_file(self, fn):
-        return os.path.join(self.path, self.annot_dir, f'{fn}{self.annot_ext}')
+        return os.path.join(self.annot_dir, f'{fn}{self.annot_ext}')
 
     def get_image_file(self, fn):
-        return os.path.join(self.path, self.image_dir, f'{fn}{self.image_ext}')
+        return os.path.join(self.image_dir, f'{fn}{self.image_ext}')
 
     def get_annotation_files(self):
         return glob.glob(
-            osp.join(self.path, self.annot_dir, f'*{self.annot_ext}'))
+            osp.join(self.annot_dir, f'*{self.annot_ext}'))
 
     def get_image_files(self):
         return glob.glob(
-            osp.join(self.path, self.image_dir, f'*{self.image_ext}'))
+            osp.join(self.image_dir, f'*{self.image_ext}'))
