@@ -11,6 +11,12 @@ data = dict(
         type="PascalDataset",
         data_root='/tmp',
         dir_name='2'
+    ),
 
+    filter_params = dict(
+        filtration = True,
+        labels_params=dict(
+            allowed_labels=['person']
+        )
     )
 )

@@ -2,7 +2,9 @@
 
 import argparse
 from utils.config.config import Config
+from utils.dataset.filter import Filter
 from utils.dataset.provider import Provider
+
 
 def parse_args(args):
     parser = argparse.ArgumentParser()
@@ -19,6 +21,15 @@ def main(args=None):
     # parse annotations to standartized format
     parser = Provider.get_dataset(cfg.data.input_data)
     annotations_container = parser.parse()
+
+    # filter annotation if necessary
+    if cfg.filter_params.filtration:
+        flt = Filter(
+            cfg=cfg.filter_params,
+            annotations_container=annotations_container
+        )
+
+        annotations_container = flt.filter_out()
 
     # convert from standartized format to selected type dataset
     converter = Provider.get_dataset(cfg.data.output_data)

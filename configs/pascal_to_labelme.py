@@ -14,5 +14,12 @@ data = dict(
         labels_params=dict(
             allowed_labels=['person']
         )
+    ),
+
+    filter_params = dict(
+        filtration = True,
+        labels_params=dict(
+            allowed_labels=['person']
+        )
     )
 )
