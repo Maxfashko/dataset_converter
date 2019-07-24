@@ -115,6 +115,7 @@ class ImageSlicer(CustomAction):
         if not osp.exists(tmp_img_path):
             os.makedirs(tmp_img_path)
 
+        count = 0
         with tqdm(total=annotations_container.get_len()) as pbar:
             for idx, annts, img_fn, annt_fn in annotations_container.get_data():
                 img = cv2.imread(img_fn)
@@ -134,9 +135,8 @@ class ImageSlicer(CustomAction):
 
                 # parse slice_objects to AnnotationsContainer
                 for obj in slice_objects:
-
                     # save current tile to tmp folder
-                    img_name = osp.join(tmp_img_path, str(idx)+'.jpg')
+                    img_name = osp.join(tmp_img_path, str(count)+'.jpg')
                     cv2.imwrite(img_name, obj.tile)
 
                     annotations = []
@@ -154,6 +154,8 @@ class ImageSlicer(CustomAction):
                         image_filename=img_name,
                         annotation_filename=None
                     )
+
+                    count += 1
 
                 pbar.update(1)
 
@@ -196,6 +198,8 @@ class ImageSlicer(CustomAction):
             tile = image[y:y + tile_height, x:x + tile_width].copy()
             assert tile.shape[0] == self.tile_size[0]
             assert tile.shape[1] == self.tile_size[1]
+
+            print(x, y, x + tile_width, y + tile_height)
 
             ret, mask_boxes, mask_labels = self.split_annotations(boxes, labels, [x, y, tile_width, tile_height])
             if not ret:
