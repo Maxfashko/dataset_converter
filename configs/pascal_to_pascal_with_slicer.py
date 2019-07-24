@@ -3,14 +3,14 @@ import os.path as osp
 data = dict(
     input_data = dict(
         type="PascalDataset",
-        data_root='data',
-        dir_name='project1'
+        data_root='/mnt/data/data/avaks/video/tatka/',
+        dir_name='2+3+4+6_combined/'
     ),
 
     output_data = dict(
         type="PascalDataset",
-        data_root='data',
-        dir_name='project2'
+        data_root='/mnt/data/data/avaks/video/tatka/',
+        dir_name='2+3+4+6_combined_slice'
     ),
 
     data_actions = [

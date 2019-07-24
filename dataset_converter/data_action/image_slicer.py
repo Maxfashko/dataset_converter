@@ -199,8 +199,6 @@ class ImageSlicer(CustomAction):
             assert tile.shape[0] == self.tile_size[0]
             assert tile.shape[1] == self.tile_size[1]
 
-            print(x, y, x + tile_width, y + tile_height)
-
             ret, mask_boxes, mask_labels = self.split_annotations(boxes, labels, [x, y, tile_width, tile_height])
             if not ret:
                 continue
