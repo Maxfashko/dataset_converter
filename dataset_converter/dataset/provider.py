@@ -2,8 +2,7 @@ import sys
 import copy
 
 import six
-from utils import dataset as parent
-from utils.config.obj_from_dict import obj_from_dict
+from dataset_converter import dataset as parent
 
 
 def is_str(x):

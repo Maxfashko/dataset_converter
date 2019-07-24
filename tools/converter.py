@@ -1,9 +1,9 @@
 #!/usr/bin/env python
 
 import argparse
-from utils.config.config import Config
-from utils.dataset.filter import Filter
-from utils.dataset.provider import Provider
+from dataset_converter.config.config import Config
+from dataset_converter.dataset.provider import Provider as dataset_provider
+from dataset_converter.data_action.action_processor import ActionProcessor
 
 
 def parse_args(args):
@@ -19,20 +19,16 @@ def main(args=None):
     cfg = Config.fromfile(known_args.config)
 
     # parse annotations to standartized format
-    parser = Provider.get_dataset(cfg.data.input_data)
+    parser = dataset_provider.get_dataset(cfg.data.input_data)
     annotations_container = parser.parse()
 
-    # filter annotation if necessary
-    if cfg.data.filter_params.filtration:
-        flt = Filter(
-            cfg=cfg.data.filter_params,
-            annotations_container=annotations_container
-        )
-
-        annotations_container = flt.filter_out()
+    # data actions: slice, filter etc...
+    if cfg.data.data_actions:
+        action_processor = ActionProcessor(cfg.data.data_actions, annotations_container)
+        annotations_container = action_processor.process()
 
     # convert from standartized format to selected type dataset
-    converter = Provider.get_dataset(cfg.data.output_data)
+    converter = dataset_provider.get_dataset(cfg.data.output_data)
     converter.convert(annotations_container)
 
 

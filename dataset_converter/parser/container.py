@@ -23,6 +23,8 @@ class Annotation:
 
 class AnnotationObject:
     def __init__(self, **kwargs):
+
+        # contained elements of Annotation
         self.annotations = kwargs.get('annotations'),
         self.image_filename = kwargs.get('image_filename'),
         self.annotation_filename = kwargs.get('annotation_filename')
@@ -30,6 +32,8 @@ class AnnotationObject:
 
 class AnnotationsContainer:
     def __init__(self):
+
+        # contained elements of AnnotationObject
         self._annotations_container = []
 
     def get_data(self):

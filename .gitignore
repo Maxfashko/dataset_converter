@@ -1,2 +1,7 @@
 __pycache__
 data
+dc.egg-info
+dataset_converter.egg-info
+dist
+.idea
+build

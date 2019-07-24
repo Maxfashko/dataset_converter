@@ -9,10 +9,10 @@ import imagesize
 from tqdm import tqdm
 from sklearn.model_selection import train_test_split
 
-from utils.dataset.custom_dataset import CustomDataset
-from utils.dataset.pascal_dataset.xmlparser import XmlParser
-from utils.parser.container import Annotation, AnnotationsContainer, BBox
-from utils.dataset.pascal_dataset.pascal_struct_dataset import PascalStructDataset
+from dataset_converter.dataset.custom_dataset import CustomDataset
+from dataset_converter.dataset.pascal_dataset.xmlparser import XmlParser
+from dataset_converter.parser.container import Annotation, AnnotationsContainer, BBox
+from dataset_converter.dataset.pascal_dataset.pascal_struct_dataset import PascalStructDataset
 
 
 class PascalDataset(CustomDataset):
