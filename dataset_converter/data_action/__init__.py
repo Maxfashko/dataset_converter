@@ -1,6 +1,6 @@
-from dataset_converter.data_action.image_slicer import ImageSlicer
-from dataset_converter.data_action.custom_action import CustomAction
+from .actions.custom_action import CustomAction
+from .actions.random_crop_action import RandomCropAction
 
 __all__ = [
-    ImageSlicer, CustomAction
+    CustomAction, RandomCropAction
 ]
