@@ -43,7 +43,7 @@ class RandomCropAction(CustomAction):
     def process(self, annotations_container):
         annotations_container_new = AnnotationsContainer()
 
-        tmp_img_path = '/tmp/image_slicer_image/'
+        tmp_img_path = '/tmp/random_crop_action/'
         if not osp.exists(tmp_img_path):
             os.makedirs(tmp_img_path)
 
