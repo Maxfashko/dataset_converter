@@ -130,7 +130,10 @@ class ImageSlicer(CustomAction):
                 boxes = np.asarray(boxes)
                 labels = np.asarray(labels)
 
+                if len(boxes) == 0 or len(labels) == 0: continue
+
                 # slice img and annotation
+                # print(img_fn)
                 slice_objects = [tile for tile in self.split(img, boxes, labels)]
 
                 # parse slice_objects to AnnotationsContainer
@@ -138,6 +141,9 @@ class ImageSlicer(CustomAction):
                     # save current tile to tmp folder
                     img_name = osp.join(tmp_img_path, str(count)+'.jpg')
                     cv2.imwrite(img_name, obj.tile)
+
+                    # print(obj.boxes)
+                    # humka
 
                     annotations = []
 
@@ -161,24 +167,40 @@ class ImageSlicer(CustomAction):
 
         return annotations_container_new
 
-    def split_annotations(self, boxes, labels, crd):
-        x, y, tile_width, tile_height = crd
+    def split_annotations(self, idx, boxes, labels, crd):
+        # x, y, tile_width, tile_height = crd
 
+        x, y, tile_width, tile_height = self.bbox_crops[idx]
         # filter bbox in area
         patch = np.array((int(x), int(y), int(x + tile_width), int(y + tile_height)))
 
+        mx = self.margin_top + self.margin_bottom
+        my = self.margin_left + self.margin_right
+        # boxes -= [mx, my, mx, my]
+
+
         center = (boxes[:, :2] + boxes[:, 2:]) / 2
         mask = (center[:, 0] > patch[0]) * (center[:, 1] > patch[1]) * (center[:, 0] < patch[2]) * (center[:, 1] < patch[3])
+        # print(mask)
         if not mask.any():
+            # print('not')
             return False, None, None
+        # else:
+        #     print('all', boxes)
+        #     print('filtered', boxes[mask])
+        #     print(self.bbox_crops[idx])
+        #     asd
+            # print('diff st',  boxes[mask] - [x,y,x,y])
 
         boxes = boxes[mask]
         labels = labels[mask]
+
 
         # adjust boxes
         boxes[:, 2:] = boxes[:, 2:].clip(max=patch[2:])
         boxes[:, :2] = boxes[:, :2].clip(min=patch[:2])
         boxes -= np.tile(patch[:2], 2)
+
         return True, boxes, labels
 
     def split(self, image, boxes, labels, border_type=cv2.BORDER_CONSTANT, value=0):
@@ -194,12 +216,12 @@ class ImageSlicer(CustomAction):
 
         # list contained elem of SliceObj class
         slice_objects = []
-        for x, y, tile_width, tile_height in self.crops:
+        for idx, (x, y, tile_width, tile_height) in enumerate(self.crops):
             tile = image[y:y + tile_height, x:x + tile_width].copy()
             assert tile.shape[0] == self.tile_size[0]
             assert tile.shape[1] == self.tile_size[1]
 
-            ret, mask_boxes, mask_labels = self.split_annotations(boxes, labels, [x, y, tile_width, tile_height])
+            ret, mask_boxes, mask_labels = self.split_annotations(idx, boxes, labels, [x, y, tile_width, tile_height])
             if not ret:
                 continue
 
