@@ -10,7 +10,7 @@ data = dict(
     output_data = dict(
         type="PascalDataset",
         data_root='data',
-        dir_name='project1_crop
+        dir_name='project1_crop'
     ),
 
 
