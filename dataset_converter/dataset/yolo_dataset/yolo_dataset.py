@@ -13,10 +13,11 @@ from dataset_converter.parser.container import Annotation, AnnotationsContainer,
 
 
 class YoloDataset(CustomDataset):
-    def __init__(self, data_root, dir_name):
+    def __init__(self, params=None, images=None, annotations=None, **kwargs):
         super(CustomDataset, self).__init__()
-        self.data_root = data_root
-        self.dir_name = dir_name
+        self.params = params
+        self.data_root = kwargs['data_root']
+        self.dir_name = kwargs['dir_name']
         self.data_path = osp.join(self.data_root, self.dir_name)
         self.struct = YoloStructDataset(path=self.data_path)
 
@@ -26,6 +27,10 @@ class YoloDataset(CustomDataset):
 
     def create_imagesets(self, idx, test_size=0.2, seed=42):
         ''' create ImageSets train/val '''
+
+        if self.params is not None:
+            test_size = self.params.train_test_split.test
+            seed = self.params.train_test_split.seed
 
         try:
             numbers = [self.struct.get_image_file(x) for x in range(0, idx)]

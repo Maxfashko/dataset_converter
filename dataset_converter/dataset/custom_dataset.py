@@ -3,10 +3,8 @@ from abc import abstractmethod
 
 
 class CustomDataset(ABC):
-    def __init__(self, **kwargs):
+    def __init__(self, params=None, images=None, annotations=None, **kwargs):
         super(CustomDataset, self).__init__()
-        self.data_root = data_root
-        self.dir_name = dir_name
 
     @classmethod
     def init_parse(cls, fun):

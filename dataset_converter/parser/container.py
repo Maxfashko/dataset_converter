@@ -131,6 +131,9 @@ class AnnotationsContainer:
         # contained elements of AnnotationObject
         self._annotations_container = []
 
+    def __len__(self):
+        return len(self._annotations_container)
+
     def get_data(self):
         for idx, obj in enumerate(self._annotations_container):
             yield idx, obj.annotations[0], obj.image_filename[0], obj.annotation_filename
