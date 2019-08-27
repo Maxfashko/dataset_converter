@@ -46,10 +46,10 @@ class PascalDataset(CustomDataset):
                     annotations.append(
                         Annotation(
                             bbox=BBox(
-                                x1=int(float(bbox.find("xmin").text)),
-                                y1=int(float(bbox.find("ymin").text)),
-                                x2=int(float(bbox.find("xmax").text)),
-                                y2=int(float(bbox.find("ymax").text))),
+                                x1=float(bbox.find("xmin").text),
+                                y1=float(bbox.find("ymin").text),
+                                x2=float(bbox.find("xmax").text),
+                                y2=float(bbox.find("ymax").text)),
                             label=obj.find("name").text
                         )
                     )
