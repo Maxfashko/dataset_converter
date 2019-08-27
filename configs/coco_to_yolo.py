@@ -1,17 +1,3 @@
-# data = dict(
-#     input_data = dict(
-#         type="PascalDataset",
-#         data_root='data',
-#         dir_name='project1'
-#     ),
-#
-#     output_data = dict(
-#         type="YoloDataset",
-#         data_root='/tmp',
-#         dir_name='project1'
-#     )
-# )
-
 data = dict(
     input_data=dict(
         type="CocoDataset",
@@ -23,8 +9,8 @@ data = dict(
 
     output_data = dict(
         type="YoloDataset",
-        data_root='/home/maksim/ssd_data',
-        dir_name='combined_15_08_19_yolo+coco',
+        data_root='/tmp/yolo_coco',
+        dir_name='val2017',
         params = dict(
             train_test_split=dict(
                 train=1,
@@ -32,18 +18,5 @@ data = dict(
                 seed=42
             )
         )
-    ),
-
-    data_actions = [
-        dict(
-            type="FilterLabelsAction",
-            allowed_labels=[
-                'person'
-            ]
-            # label_mapping={
-            #     'pedestrian':'person',
-            #     'man':'person'
-            # }
-        )
-    ]
+    )
 )

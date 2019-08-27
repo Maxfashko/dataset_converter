@@ -1,5 +1,3 @@
-import os.path as osp
-
 data = dict(
     input_data = dict(
         type="PascalDataset",
@@ -31,13 +29,15 @@ data = dict(
             height=1080
 
         ),
-        # not implemented!
-        # dict(
-        #     type="FilterLabel",
-        #     label_mapping={
-        #         'pedestrian':'person',
-        #         'man':'person'
-        #     }
-        # )
+        dict(
+            type="FilterLabelsAction",
+            allowed_labels=[
+                'person'
+            ],
+            labels_mapping={
+                'pedestrian':'person',
+                'man':'person'
+            }
+        )
     ]
 )

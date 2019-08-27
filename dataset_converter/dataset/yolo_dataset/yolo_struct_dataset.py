@@ -9,7 +9,7 @@ class YoloStructDataset:
     def __init__(self, path):
         self.path = path
         self.annot_ext = '.txt'
-        self.image_ext = '.png'
+        self.image_ext = '.jpg'
         self.test_list_name = 'test.txt'
         self.train_list_name = 'train.txt'
         self.annot_dir = self.path
@@ -28,6 +28,7 @@ class YoloStructDataset:
                 sys.exit(-1)
             else:
                 shutil.rmtree(self.path)
+
 
         os.makedirs(self.path)
         os.makedirs(self.image_sets)

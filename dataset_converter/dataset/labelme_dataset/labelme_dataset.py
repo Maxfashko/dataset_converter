@@ -112,8 +112,7 @@ class LabelmeDataset(CustomDataset):
     @CustomDataset.init_convert
     def convert(self, annotations_container):
         # create structure over drive
-        if not self.struct.check_struct_path():
-            self.struct.make_struct_path()
+        self.struct.make_struct_path()
 
         # create project folders
         self.struct.make_project_path()

@@ -11,9 +11,10 @@ from dataset_converter.parser.container import AnnotationsContainer
 
 
 class FilterLabelsAction(CustomAction):
-    def __init__(self, allowed_labels):
+    def __init__(self, allowed_labels, labels_mapping):
         super(CustomAction, self).__init__()
         self.allowed_labels = allowed_labels
+        self.labels_mapping = labels_mapping
 
     @CustomAction.init_process
     def process(self, annotations_container):
@@ -25,7 +26,14 @@ class FilterLabelsAction(CustomAction):
                 annotations = []
 
                 for an in annts:
+
+                    # filter labels
                     if an.label in self.allowed_labels:
+                        annotations.append(an)
+
+                    # mapping labels
+                    if an.label in self.labels_mapping:
+                        an.label = self.labels_mapping[an.label]
                         annotations.append(an)
 
                 if annotations:

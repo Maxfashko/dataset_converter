@@ -77,8 +77,7 @@ class PascalDataset(CustomDataset):
     @CustomDataset.init_convert
     def convert(self, annotations_container):
         # create structure over drive
-        if not self.struct.check_path():
-            self.struct.make_struct()
+        self.struct.make_struct()
 
         with tqdm(total=annotations_container.get_len()) as pbar:
             for idx, annts, img_fn, annt_fn in annotations_container.get_data():

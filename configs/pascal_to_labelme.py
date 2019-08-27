@@ -1,5 +1,3 @@
-import os.path as osp
-
 data = dict(
     input_data = dict(
         type="PascalDataset",

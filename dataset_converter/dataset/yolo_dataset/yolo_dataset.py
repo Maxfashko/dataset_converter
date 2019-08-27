@@ -44,8 +44,7 @@ class YoloDataset(CustomDataset):
     @CustomDataset.init_convert
     def convert(self, annotations_container):
         # create structure over drive
-        if not self.struct.check_path():
-            self.struct.make_struct()
+        self.struct.make_struct()
 
         labels_mapping = annotations_container.mapping_labels_to_int()
 
