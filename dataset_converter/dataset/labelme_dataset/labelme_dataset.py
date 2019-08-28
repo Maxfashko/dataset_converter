@@ -48,13 +48,20 @@ cfg params:
 
 class LabelmeDataset(CustomDataset):
     """docstring for LabelmeDataset"""
-    def __init__(self, data_root, dir_name):
+    def __init__(self, params=None, images=None, annotations=None, **kwargs):
         super(CustomDataset, self).__init__()
-        self.data_root = data_root
-        self.dir_name = dir_name
+        self.data_root = kwargs['data_root']
+        self.dir_name = kwargs['dir_name']
+        self.images = images
+        self.params = params
+        self.annotations = annotations
+
         self.data_path = osp.join(self.data_root, self.dir_name)
         self.struct = LabelmeStructDataset(
-            data_root=self.data_root, dir_name=self.dir_name
+            data_root=self.data_root,
+            dir_name=self.dir_name,
+            images=self.images,
+            annotations=self.annotations
         )
 
     @CustomDataset.init_parse

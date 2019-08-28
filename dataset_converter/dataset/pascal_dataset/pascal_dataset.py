@@ -16,12 +16,20 @@ from dataset_converter.dataset.pascal_dataset.pascal_struct_dataset import Pasca
 
 
 class PascalDataset(CustomDataset):
-    def __init__(self, data_root, dir_name):
+    def __init__(self, params=None, images=None, annotations=None, **kwargs):
         super(CustomDataset, self).__init__()
-        self.data_root = data_root
-        self.dir_name = dir_name
+        self.data_root = kwargs['data_root']
+        self.dir_name = kwargs['dir_name']
+        self.images = images
+        self.params = params
+        self.annotations = annotations
+
+
         self.data_path = osp.join(self.data_root, self.dir_name)
-        self.struct = PascalStructDataset(path=self.data_path)
+        self.struct = PascalStructDataset(
+            path=self.data_path,
+            images=self.images,
+            annotations=self.annotations)
 
     @CustomDataset.init_parse
     def parse(self):

@@ -5,14 +5,26 @@ import shutil
 import os.path as osp
 
 class PascalStructDataset:
-    def __init__(self, path):
+    def __init__(self, path, images, annotations):
         self.path = path
+        self.images = images
+        self.annotations = annotations
+
         self.annot_ext = '.xml'
         self.image_ext = '.jpg'
         self.test_list_name = 'test.txt'
         self.train_list_name = 'trainval.txt'
-        self.annot_dir = os.path.join(self.path, 'Annotations')
-        self.image_dir = os.path.join(self.path, 'JPEGImages')
+
+        if not self.annotations:
+            self.annot_dir = os.path.join(self.path, 'Annotations')
+        else:
+            self.annot_dir = os.path.join(self.path, self.annotations)
+
+        if not self.images:
+            self.image_dir = os.path.join(self.path, 'JPEGImages')
+        else:
+            self.image_dir = os.path.join(self.path, self.images)
+            
         self.image_sets = os.path.join(self.path, 'ImageSets/Main/')
 
     def check_path(self):

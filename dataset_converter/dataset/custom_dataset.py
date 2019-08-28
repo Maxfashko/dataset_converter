@@ -3,7 +3,7 @@ from abc import abstractmethod
 
 
 class CustomDataset(ABC):
-    def __init__(self, params=None, images=None, annotations=None, **kwargs):
+    def __init__(self, **kwargs):
         super(CustomDataset, self).__init__()
 
     @classmethod

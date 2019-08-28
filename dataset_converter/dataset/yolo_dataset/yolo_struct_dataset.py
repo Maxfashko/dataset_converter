@@ -6,14 +6,26 @@ import os.path as osp
 
 
 class YoloStructDataset:
-    def __init__(self, path):
+    def __init__(self, path, images, annotations):
         self.path = path
+        self.images = images
+        self.annotations = annotations
+
         self.annot_ext = '.txt'
         self.image_ext = '.jpg'
         self.test_list_name = 'test.txt'
         self.train_list_name = 'train.txt'
-        self.annot_dir = self.path
-        self.image_dir = self.path
+
+        if not self.annotations:
+            self.annot_dir = self.path
+        else:
+            self.annot_dir = os.path.join(self.path, self.annotations)
+
+        if not self.images:
+            self.image_dir = self.path
+        else:
+            self.image_dir = os.path.join(self.path, self.images)
+
         self.image_sets = self.path + '/ImageSets/'
 
     def check_path(self):

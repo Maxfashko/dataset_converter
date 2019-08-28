@@ -15,12 +15,13 @@ from dataset_converter.dataset.coco_dataset.coco_struct_dataset import CocoStruc
 
 
 class CocoDataset(CustomDataset):
-    def __init__(self, params=None, **kwargs):
+    def __init__(self, params=None, images=None, annotations=None, **kwargs):
         super(CustomDataset, self).__init__()
         self.data_root = kwargs['data_root']
         self.dir_name = kwargs['dir_name']
-        self.images = kwargs['images']
-        self.annotations = kwargs['annotations']
+        self.images = images
+        self.params = params
+        self.annotations = annotations
 
         self.data_path = osp.join(self.data_root, self.dir_name)
         self.params = params

@@ -9,13 +9,27 @@ class LabelmeStructDataset:
     def __init__(self, **kwargs):
         self.data_root = kwargs['data_root']
         self.dir_name = kwargs['dir_name']
+        self.images = kwargs['images']
+        self.annotations = kwargs['annotations']
+
         self.annot_ext = '.xml'
         self.image_ext = '.jpg'
 
         self.info_dir = osp.join(self.data_root, 'Info')
         self.mask_dir = osp.join(self.data_root, 'Masks')
-        self.image_dir = osp.join(self.data_root, 'Images')
-        self.annot_dir = osp.join(self.data_root, 'Annotations')
+
+        if not self.images:
+            self.image_dir = osp.join(self.data_root, 'Images')
+        else:
+            print('data that does not match the structure of the dataset is NotImplemented for LabelmeStructDataset')
+            sys.exit(-1)
+
+        if not self.annotations:
+            self.annot_dir = osp.join(self.data_root, 'Annotations')
+        else:
+            print('data that does not match the structure of the dataset is NotImplemented for LabelmeStructDataset')
+            sys.exit(-1)
+
         self.scribbles_dir = osp.join(self.data_root, 'Scribbles')
 
         self.info_dir_project = osp.join(self.info_dir, self.dir_name)

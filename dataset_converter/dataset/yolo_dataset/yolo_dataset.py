@@ -15,11 +15,17 @@ from dataset_converter.parser.container import Annotation, AnnotationsContainer,
 class YoloDataset(CustomDataset):
     def __init__(self, params=None, images=None, annotations=None, **kwargs):
         super(CustomDataset, self).__init__()
-        self.params = params
         self.data_root = kwargs['data_root']
         self.dir_name = kwargs['dir_name']
+        self.images = images
+        self.params = params
+        self.annotations = annotations
+
         self.data_path = osp.join(self.data_root, self.dir_name)
-        self.struct = YoloStructDataset(path=self.data_path)
+        self.struct = YoloStructDataset(
+            path=self.data_path,
+            images=self.images,
+            annotations=self.annotations)
 
     @CustomDataset.init_parse
     def parse(self):
