@@ -15,7 +15,9 @@ Supported methods are shown in the below table
 | YOLO               | ✗      | ✓       | ✓                    |
 
 **parse** - the method provides an opportunity to read data and convert it into a unified structure, which operates with all dataset formats
+
 **convert** - the method provides the ability to convert data from a unified structure into the selected dataset format
+
 **convert** - support for data that can be set as paths to the annotation directory and images
 
 
@@ -36,6 +38,7 @@ wget http://host.robots.ox.ac.uk/pascal/VOC/voc2007/VOCtrainval_06-Nov-2007.tar
 tar xvf VOCtrainval_06-Nov-2007.tar
 ```
 
+
 2) The parameters for data conversion are located in the configuration file (https://github.com/Maxfashko/dataset_converter/blob/master/configs/pascal_to_yolo.py). replace the `data_root`, `dir_name` options. As a result, the configuration file should look like this:
 
 ```python
@@ -53,6 +56,7 @@ data = dict(
     )
 )
 ```
+
 
 3) To convert your dataset from the PASCAL format to the YOLO format, use the following command:
 
@@ -72,3 +76,28 @@ classes: {'sheep': 0, 'bus': 1, 'chair': 2, 'tvmonitor': 3, 'boat': 4, 'cat': 5,
 convert completed
 ```
 
+
+4) By default, the data is split for training and testing in the proportion of 80/20. You can specify your values:
+
+```python
+data = dict(
+    input_data = dict(
+        type="PascalDataset",
+        data_root='/tmp/VOCdevkit',
+        dir_name='VOC2007'
+    ),
+
+    output_data = dict(
+        type="YoloDataset",
+        data_root='/tmp/VOCdevkit_YOLO',
+        dir_name='VOC2007',
+        params = dict(
+            train_test_split=dict(
+                train=0.9,
+                test=0.1,
+                seed=42
+            )
+        )
+    )
+)
+```
