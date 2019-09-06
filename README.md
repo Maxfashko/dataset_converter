@@ -39,7 +39,7 @@ tar xvf VOCtrainval_06-Nov-2007.tar
 ```
 
 
-2) The parameters for data conversion are located in the configuration file (https://github.com/Maxfashko/dataset_converter/blob/master/configs/pascal_to_yolo.py). replace the `data_root`, `dir_name` options. As a result, the configuration file should look like this:
+2) The parameters for data conversion are located in the configuration file (https://github.com/Maxfashko/dataset_converter/blob/master/configs/pascal_to_yolo.py) replace the `data_root`, `dir_name` options. As a result, the configuration file should look like this:
 
 ```python
 data = dict(
