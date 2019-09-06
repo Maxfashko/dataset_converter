@@ -27,7 +27,7 @@ Supported methods are shown in the below table
 
 ## Get Started
 
-### convert dataset
+### convert dataset using a structured data format
 In this example, we download and convert data from the PASCAL format to the YOLO format.
 
 1) Download dataset PASCAL_VOC 2007:
@@ -100,4 +100,41 @@ data = dict(
         )
     )
 )
+```
+
+### convert dataset using a unstructured data format
+
+In this example, we are converting data that does not match the PASCAL directory structure, but belongs to this format. For example, we will use the data obtained as a result of manual marking in the [LabelImg](https://github.com/tzutalin/labelImg) program. For more information about the markup process, find out the [link](https://github.com/tzutalin/labelImg)
+The marked data can be found at the following link (https://github.com/Maxfashko/dataset_converter/edit/master/test_data/labelimg/)
+
+
+1) edit the configuration file to look like this:
+
+```python
+data = dict(
+    input_data = dict(
+        type="PascalDataset",
+        data_root='<link_to_repo_path>/dataset_converter/test_data/',
+        dir_name='labelimg',
+        images='./',
+        annotations='./'
+    ),
+
+    output_data = dict(
+        type="YoloDataset",
+        data_root='/tmp/test_data/',
+        dir_name='labelimg_YOLO'
+    )
+)
+```
+
+you will see the following output:
+
+```shell
+start parse...
+100%|███████████████████████████████████████████████████████████████████████████████████████████████████| 1/1 [00:00<00:00, 12196.88it/s]
+parse completed
+start convert...
+100%|███████████████████████████████████████████████████████████████████████████████████████████████████| 1/1 [00:00<00:00, 8700.78it/s]
+convert completed
 ```
