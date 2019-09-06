@@ -71,7 +71,6 @@ start parse...
 100%|████████████████████████████████████████████████████████████████████████████████████████████| 5011/5011 [00:00<00:00, 30432.46it/s]
 parse completed
 start convert...
-classes: {'sheep': 0, 'bus': 1, 'chair': 2, 'tvmonitor': 3, 'boat': 4, 'cat': 5, 'pottedplant': 6, 'train': 7, 'dog': 8, 'bottle': 9, 'bicycle': 10, 'person': 11, 'horse': 12, 'car': 13, 'aeroplane': 14, 'diningtable': 15, 'sofa': 16, 'bird': 17, 'cow': 18, 'motorbike': 19}
 100%|█████████████████████████████████████████████████████████████████████████████████████████████| 5011/5011 [00:00<00:00, 15454.61it/s]
 convert completed
 ```
