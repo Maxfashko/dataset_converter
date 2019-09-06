@@ -18,7 +18,7 @@ Supported methods are shown in the below table
 
 **convert** - the method provides the ability to convert data from a unified structure into the selected dataset format
 
-**convert** - support for data that can be set as paths to the annotation directory and images
+**unstructured support** - support for data that can be set as paths to the annotation directory and images
 
 
 ## Installation
