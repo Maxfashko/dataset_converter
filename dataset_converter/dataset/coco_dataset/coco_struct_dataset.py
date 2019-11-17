@@ -28,6 +28,7 @@ class CocoStructDataset:
             self.dataset = COCO(osp.join(self.path, self.annotations))
             self.provider()
         except Exception as e:
+            print(e)
             pass
 
         self.data = {
