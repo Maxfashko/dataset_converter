@@ -9,7 +9,7 @@ Supported methods are shown in the below table
 
 |                    | parse  | convert | unstructured support |
 |--------------------|:------:|:-------:|:--------------------:|
-| COCO               | ✓      | ✗       | ✗                    |
+| COCO               | ✓      | ✓       | ✗                    |
 | PASCAL             | ✓      | ✓       | ✓                    |
 | Labelme-web        | ✓      | ✓       | ✗                    |
 | YOLO               | ✗      | ✓       | ✓                    |

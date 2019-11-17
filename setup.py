@@ -12,7 +12,7 @@ setuptools.setup(
     maintainer       = 'Maksim Koriukin',
     maintainer_email = 'maxfashko@gmail.com',
     packages         = ['dataset_converter'],
-    install_requires = ['tqdm', 'addict', 'opencv-python'],
+    install_requires = ['tqdm', 'addict', 'opencv-python', 'pycocotools'],
     classifiers=[
         'Development Status :: 0.1.0 - Alpha',
         'License :: OSI Approved :: Apache Software License',
