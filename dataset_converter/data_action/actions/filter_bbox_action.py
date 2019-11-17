@@ -9,11 +9,10 @@ from .custom_action import CustomAction
 from dataset_converter.parser.container import AnnotationsContainer
 
 
-class FilterLabelsAction(CustomAction):
-    def __init__(self, allowed_labels, labels_mapping):
+class FilterBBoxAction(CustomAction):
+    def __init__(self, min_area):
         super(CustomAction, self).__init__()
-        self.allowed_labels = allowed_labels
-        self.labels_mapping = labels_mapping
+        self.min_area = min_area
 
     @CustomAction.init_process
     def process(self, annotations_container):
@@ -24,15 +23,10 @@ class FilterLabelsAction(CustomAction):
                 annotations = []
 
                 for an in annts:
-
-                    # filter labels
-                    if an.label in self.allowed_labels:
+                    if an.bbox.width * an.bbox.height >= self.min_area:
                         annotations.append(an)
-
-                    # mapping labels
-                    if an.label in self.labels_mapping:
-                        an.label = self.labels_mapping[an.label]
-                        annotations.append(an)
+                    else:
+                        print('min_area!', an.bbox.width * an.bbox.height)
 
                 if annotations:
                     annotations_container_new.add_data(

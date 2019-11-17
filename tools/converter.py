@@ -29,7 +29,6 @@ def main(args=None):
 
     # convert from standartized format to selected type dataset
     converter = dataset_provider.get_dataset(cfg.data.output_data)
-    print('converter', converter)
     converter.convert(annotations_container)
 
 

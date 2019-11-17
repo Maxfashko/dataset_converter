@@ -24,6 +24,10 @@ data = dict(
                 'personw':'head',
                 'person':'head'
             }
+        ),
+        dict(
+            type="FilterBBoxAction",
+            min_area=20 # pix
         )
     ]
 )
