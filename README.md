@@ -13,6 +13,8 @@ Supported methods are shown in the below table
 | PASCAL             | ✓      | ✓       | ✓                    |
 | Labelme-web        | ✓      | ✓       | ✗                    |
 | YOLO               | ✗      | ✓       | ✓                    |
+| CSV                | ✗      | ✓       | ✓                    |
+
 
 **parse** - the method provides an opportunity to read data and convert it into a unified structure, which operates with all dataset formats
 

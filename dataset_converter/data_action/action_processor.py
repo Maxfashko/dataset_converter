@@ -10,6 +10,10 @@ class ActionProcessor(object):
 
     def process(self):
         for elem in self.action_list:
+
+            # init class
             action = action_provider.get_action(elem)
+
+            # process
             self.annotations_container = action.process(self.annotations_container)
         return self.annotations_container

@@ -14,7 +14,6 @@ from dataset_converter.dataset.labelme_dataset.xmlparser import XmlParser
 from dataset_converter.parser.container import Annotation, AnnotationsContainer, BBox
 from dataset_converter.dataset.labelme_dataset.labelme_struct_dataset import LabelmeStructDataset
 
-
 """
 labelme annotation tool
 for example structure:
@@ -46,14 +45,20 @@ cfg params:
     dir_name=project1
 """
 
+
 class LabelmeDataset(CustomDataset):
     """docstring for LabelmeDataset"""
-    def __init__(self, params=None, images=None, annotations=None, **kwargs):
+
+    def __init__(self, params=None, images=None, annotations=None, masks=None, info=None, scribbles=None, **kwargs):
         super(CustomDataset, self).__init__()
         self.data_root = kwargs['data_root']
         self.dir_name = kwargs['dir_name']
+        self.scribbles = scribbles
         self.images = images
         self.params = params
+        self.masks = masks
+        self.info = info
+
         self.annotations = annotations
 
         self.data_path = osp.join(self.data_root, self.dir_name)
@@ -61,6 +66,9 @@ class LabelmeDataset(CustomDataset):
             data_root=self.data_root,
             dir_name=self.dir_name,
             images=self.images,
+            masks=self.masks,
+            info=self.info,
+            scribbles=self.scribbles,
             annotations=self.annotations
         )
 
@@ -71,7 +79,7 @@ class LabelmeDataset(CustomDataset):
             sys.exit()
 
         def parse_points(polygon):
-            d = {'x':set(), 'y':set()}
+            d = {'x': set(), 'y': set()}
 
             for pt in polygon.findall("pt"):
                 d['x'].add(int(float(pt.find('x').text)))
@@ -83,7 +91,6 @@ class LabelmeDataset(CustomDataset):
             y2 = max(d['y'])
 
             return x1, y1, x2, y2
-
 
         annotations_container = AnnotationsContainer()
         filenames = list(glob(f'{self.struct.annot_dir_project}/*{self.struct.annot_ext}'))

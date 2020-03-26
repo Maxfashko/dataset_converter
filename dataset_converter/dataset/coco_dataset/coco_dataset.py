@@ -65,11 +65,10 @@ class CocoDataset(CustomDataset):
             data = json.load(f)
 
         image_idx = [x['id'] for x in data['images']]
-        train_img_idx, val_img_idx, _, _ = train_test_split(image_idx, image_idx,
-            test_size=test, random_state=seed)
+        train_img_idx, val_img_idx, _, _ = train_test_split(image_idx, image_idx, test_size=test, random_state=seed)
 
-        train = {'images':[], "annotations":[], 'categories':[], "licenses":data['licenses']}
-        val = {'images':[], "annotations":[], 'categories':[], "licenses":data['licenses']}
+        train = {'images': [], "annotations": [], 'categories': [], "licenses": data['licenses']}
+        val = {'images': [], "annotations": [], 'categories': [], "licenses": data['licenses']}
 
         for annot in data['annotations']:
             if self.struct.is_val(annot['image_id'], val_img_idx):
@@ -100,7 +99,6 @@ class CocoDataset(CustomDataset):
         self.struct.dump_data(train, train_fn)
         self.struct.dump_data(val, val_fn)
 
-
     @CustomDataset.init_convert
     def convert(self, annotations_container):
         # create structure over drive
@@ -109,14 +107,19 @@ class CocoDataset(CustomDataset):
         categories_dict = annotations_container.mapping_labels_to_int()
 
         # append categories
-        for k,v in categories_dict.items():
+        for k, v in categories_dict.items():
             self.struct.add_category(name=k, id=v)
 
         annotation_id = 0
 
         with tqdm(total=annotations_container.get_len()) as pbar:
             for idx, annts, img_fn, annt_fn in annotations_container.get_data():
-                (w, h) = imagesize.get(img_fn)
+
+                try:
+                    (w, h) = imagesize.get(img_fn)
+                except Exception as e:
+                    print(e)
+                    continue
 
                 # write image
                 shutil.copy(img_fn, self.struct.get_image_file(idx))

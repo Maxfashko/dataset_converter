@@ -1,20 +1,20 @@
 data = dict(
     input_data=dict(
         type="CocoDataset",
-        data_root='/mnt/data/data',
+        data_root='/DATASET/',
         dir_name='coco',
-        images='images/val2017',
-        annotations='annotations/instances_val2017.json',
+        images='images',
+        annotations='annotations/annotation_data.json',
     ),
 
-    output_data = dict(
+    output_data=dict(
         type="YoloDataset",
-        data_root='/tmp/yolo_coco',
-        dir_name='val2017',
-        params = dict(
+        data_root='/tmp/',
+        dir_name='yolo',
+        params=dict(
             train_test_split=dict(
-                train=1,
-                test=0,
+                train=0.8,
+                test=0.2,
                 seed=42
             )
         )

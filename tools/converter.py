@@ -24,7 +24,8 @@ def main(args=None):
 
     # data actions: slice, filter etc...
     if cfg.data.data_actions:
-        action_processor = ActionProcessor(cfg.data.data_actions, annotations_container)
+        action_processor = ActionProcessor(
+            cfg.data.data_actions, annotations_container)
         annotations_container = action_processor.process()
 
     # convert from standartized format to selected type dataset

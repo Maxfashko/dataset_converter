@@ -1,9 +1,12 @@
 data = dict(
     input_data=dict(
-        type="PascalDataset",
+        type="LabelmeDataset",
         data_root='/DATASET/',
-        dir_name='pascal'
+        dir_name='labelme/',
+        images='images',
+        annotations='xml',
     ),
+
     output_data=dict(
         type="CocoDataset",
         data_root='/tmp/',

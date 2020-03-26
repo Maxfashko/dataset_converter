@@ -19,7 +19,7 @@ class RandomCropAction(CustomAction):
     """
     Helper class to augmentation data
     """
-    def __init__(self, width, height, n_crops, min_area, max_iters=50):
+    def __init__(self, width, height, n_crops, min_area, max_iters=50, parser=None):
         super(CustomAction, self).__init__()
         self.min_area = min_area
         self.width = width

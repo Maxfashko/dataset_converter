@@ -1,18 +1,17 @@
 data = dict(
-    input_data = dict(
+    input_data=dict(
         type="PascalDataset",
-        data_root='data',
-        dir_name='project1'
+        data_root='/DATASET/',
+        dir_name='pascal'
     ),
 
-    output_data = dict(
+    output_data=dict(
         type="PascalDataset",
-        data_root='data',
-        dir_name='project1_crop'
+        data_root='/tmp/',
+        dir_name='pascal'
     ),
 
-
-    data_actions = [
+    data_actions=[
         dict(
             type="RandomCropAction",
 
@@ -35,8 +34,8 @@ data = dict(
                 'person'
             ],
             labels_mapping={
-                'pedestrian':'person',
-                'man':'person'
+                'pedestrian': 'person',
+                'man': 'person'
             }
         )
     ]

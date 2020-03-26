@@ -7,36 +7,35 @@ import os.path as osp
 
 class LabelmeStructDataset:
     def __init__(self, **kwargs):
-        self.data_root = kwargs['data_root']
         self.dir_name = kwargs['dir_name']
-        self.images = kwargs['images']
+        self.data_root = kwargs['data_root']
         self.annotations = kwargs['annotations']
+        self.scribbles = kwargs['scribbles']
+        self.images = kwargs['images']
+        self.masks = kwargs['masks']
+        self.info = kwargs['info']
 
         self.annot_ext = '.xml'
         self.image_ext = '.jpg'
 
-        self.info_dir = osp.join(self.data_root, 'Info')
-        self.mask_dir = osp.join(self.data_root, 'Masks')
+        self.info_dir_project = self.check_path(self.info, 'Info')
+        self.mask_dir_project = self.check_path(self.masks, 'Masks')
+        self.image_dir_project = self.check_path(self.images, 'Images')
+        self.annot_dir_project = self.check_path(self.annotations, 'Annotations')
+        self.scribbles_dir_project = self.check_path(self.scribbles, 'Scribbles')
 
-        if not self.images:
-            self.image_dir = osp.join(self.data_root, 'Images')
+    def check_path(self, arg_obj, prefix_dir):
+        if arg_obj is None:
+            path = osp.join(self.data_root, prefix_dir)
+            result_obj = osp.join(path, self.dir_name)
         else:
-            print('data that does not match the structure of the dataset is NotImplemented for LabelmeStructDataset')
-            sys.exit(-1)
+            result_obj = osp.join(self.data_root, self.dir_name, arg_obj)
 
-        if not self.annotations:
-            self.annot_dir = osp.join(self.data_root, 'Annotations')
-        else:
-            print('data that does not match the structure of the dataset is NotImplemented for LabelmeStructDataset')
-            sys.exit(-1)
+        print(result_obj)
 
-        self.scribbles_dir = osp.join(self.data_root, 'Scribbles')
-
-        self.info_dir_project = osp.join(self.info_dir, self.dir_name)
-        self.mask_dir_project = osp.join(self.mask_dir, self.dir_name)
-        self.image_dir_project = osp.join(self.image_dir, self.dir_name)
-        self.annot_dir_project = osp.join(self.annot_dir, self.dir_name)
-        self.scribbles_dir_project = osp.join(self.scribbles_dir, self.dir_name)
+        if osp.exists(result_obj):
+            return result_obj
+        return None
 
     def check_struct_path(self):
         if not osp.exists(self.data_root):
@@ -44,19 +43,26 @@ class LabelmeStructDataset:
         return True
 
     def check_project_path(self):
-        ret = [osp.exists(x) for x in [self.image_dir_project,
-                                       self.mask_dir_project,
-                                       self.info_dir_project]]
-        if False in ret:
+        # ограничиваемся минимальным набором: labels, images
+        if self.image_dir_project is None:
+            print(f'image_dir_project: {self.image_dir_project}')
+        if self.annot_dir_project is None:
+            print(f'annot_dir_project: {self.annot_dir_project}')
             return False
         return True
 
     def make_project_path(self, rewrite=True):
-        ret = [osp.exists(x) for x in [ self.info_dir_project,
-                                        self.mask_dir_project,
-                                        self.image_dir_project,
-                                        self.annot_dir_project,
-                                        self.scribbles_dir_project]]
+        if self.mask_dir_project is not None:
+            ret = [osp.exists(x) for x in [self.info_dir_project,
+                                           self.mask_dir_project,
+                                           self.image_dir_project,
+                                           self.annot_dir_project,
+                                           self.scribbles_dir_project]]
+        else:
+            ret = [osp.exists(x) for x in [self.info_dir_project,
+                                           self.image_dir_project,
+                                           self.annot_dir_project,
+                                           self.scribbles_dir_project]]
         if True in ret:
             if not rewrite:
                 print('directory already exists!')
@@ -71,12 +77,13 @@ class LabelmeStructDataset:
                         shutil.rmtree(p)
                     except Exception as e:
                         pass
-
+        print('<<<<1')
         os.makedirs(self.info_dir_project)
         os.makedirs(self.mask_dir_project)
         os.makedirs(self.image_dir_project)
         os.makedirs(self.annot_dir_project)
         os.makedirs(self.scribbles_dir_project)
+        print('<<<<2')
 
     def make_struct_path(self, rewrite=False):
         if self.check_struct_path():

@@ -10,7 +10,7 @@ from dataset_converter.parser.container import AnnotationsContainer
 
 
 class FilterLabelsAction(CustomAction):
-    def __init__(self, allowed_labels=None, labels_mapping=None):
+    def __init__(self, allowed_labels=None, labels_mapping=None, parser=None):
         super(CustomAction, self).__init__()
         self.allowed_labels = allowed_labels
         self.labels_mapping = labels_mapping

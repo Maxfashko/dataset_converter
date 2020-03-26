@@ -10,7 +10,7 @@ from dataset_converter.parser.container import AnnotationsContainer
 
 
 class FilterBBoxAction(CustomAction):
-    def __init__(self, min_area):
+    def __init__(self, min_area, parser=None):
         super(CustomAction, self).__init__()
         self.min_area = min_area
 

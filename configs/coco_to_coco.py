@@ -1,16 +1,17 @@
 data = dict(
+
     input_data=dict(
         type="CocoDataset",
-        data_root='/tmp/coco/',
-        dir_name='head',
+        data_root='/DATASET/',
+        dir_name='coco/',
         images='images/',
         annotations='annotations/annotation_data.json',
     ),
-    output_data = dict(
+    output_data=dict(
         type="CocoDataset",
-        data_root='/tmp/coco/',
-        dir_name='head2',
-        params = dict(
+        data_root='/tmp/',
+        dir_name='coco/',
+        params=dict(
             train_test_split=dict(
                 train=0.8,
                 test=0.2,
@@ -18,10 +19,12 @@ data = dict(
             )
         )
     ),
-    data_actions = [
+    data_actions=[
         dict(
-            type="FilterBBoxAction",
-            min_area=20 # pix
+            type="MakeCropsAction",
+            min_height=140,
+            crop_width=140,
+            crop_height=250,
         )
     ]
 )
