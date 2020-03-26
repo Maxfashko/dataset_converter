@@ -13,6 +13,7 @@ class CsvStructDataset:
         self.data_root = kwargs['data_root']
         self.annotations = kwargs['annotations']
         self.path = osp.join(self.data_root, self.dir_name)
+        self.annot_ext = '.json'
 
         self.data = {'image': [], 'x1': [], 'y1': [], 'x2': [], 'y2': [], 'label': []}
 
@@ -38,6 +39,9 @@ class CsvStructDataset:
         self.data['y2'].append(bbox.y2)
         self.data['label'].append(label)
 
-    def dump(self):
+    def data_to_df(self):
+        return pd.DataFrame.from_dict(self.data)
+
+    def dump(self, data, path):
         save_path = osp.join(self.path, self.annotations)
-        pd.DataFrame.from_dict(self.data).to_csv(save_path, index=None, header=False)
+        data.to_csv(path, index=None, header=False)
