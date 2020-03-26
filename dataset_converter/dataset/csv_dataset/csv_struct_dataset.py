@@ -13,7 +13,7 @@ class CsvStructDataset:
         self.data_root = kwargs['data_root']
         self.annotations = kwargs['annotations']
         self.path = osp.join(self.data_root, self.dir_name)
-        self.annot_ext = '.json'
+        self.annot_ext = '.csv'
 
         self.data = {'image': [], 'x1': [], 'y1': [], 'x2': [], 'y2': [], 'label': []}
 
