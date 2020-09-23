@@ -8,10 +8,11 @@ import pandas as pd
 
 
 class CsvStructDataset:
-    def __init__(self, **kwargs):
+    def __init__(self, images, **kwargs):
         self.dir_name = kwargs['dir_name']
         self.data_root = kwargs['data_root']
         self.annotations = kwargs['annotations']
+        self.images = images
         self.path = osp.join(self.data_root, self.dir_name)
         self.annot_ext = '.csv'
 
