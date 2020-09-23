@@ -1,8 +1,8 @@
 data = dict(
     input_data=dict(
         type="CsvDataset",
-        data_root='/home/maksim/Документы/TASK/evraz_conveyor/VIDEOARHIV/2020-09-15-part1/',
-        dir_name='part1_images_correct',
+        data_root='/tmp/',
+        dir_name='scv',
         images='part1/',
         annotations='annot.csv',
     ),
